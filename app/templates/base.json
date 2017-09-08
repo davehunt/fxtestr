@@ -1,0 +1,12 @@
+{
+  "from": "{{ schema }}",
+  {% block groupby %}{% endblock %}
+  {% block edges %}{% endblock %}
+  {% block select %}{% endblock %}
+  {% block where %}{% endblock %}
+  "format": "table",
+  "limit": 1000,
+  "meta": {
+    "save": true
+  }
+}

@@ -1,0 +1,29 @@
+<div class="card{% if not tests %} border-success{% endif %}">
+  <div class="card-header">Lowest pass rate</div>
+  {% if tests %}
+    <div class="list-group list-group-flush">
+      {% for t in tests %}
+        <a href="javascript:showTests('{{ t.test|urlencode }}', 'failures')"
+           class="d-inline-block text-truncate list-group-item list-group-item-action">
+          <span class="badge badge-secondary mr-sm-2">
+            {{ (t.pass * 100)|round(0, 'floor')|int }}%
+          </span>
+          {{ t.test }}
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card-body text-success">
+      <h4>Hooray!</h4>
+      <p class="card-text">There were no failures. That can't be right!?</p>
+    </div>
+  {% endif %}
+  <div class="card-footer">
+    <small>
+      <a href="https://activedata.allizom.org/tools/query.html#query_id={{ meta.saved_as }}"
+         target="_blank" class="text-muted">
+         Query ran on {{ meta.timestamp.strftime('%d %b %Y at %X') }} and took {{ meta.timing.total }} seconds.
+      </a>
+    </small>
+  </div>
+</div>

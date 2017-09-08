@@ -1,0 +1,23 @@
+{% extends "base.json" %}
+{% set schema = "unittest" %}
+{% block groupby %}
+  "groupby": [
+    {
+      "name": "branch",
+      "value": "build.branch"
+    }
+  ],
+{% endblock groupby %}
+{% block where %}
+  "where": {
+    "and": [
+      {
+        "gt": {
+          "run.stats.start_time": {
+            "date": "{{ since }}"
+          }
+        }
+      }
+    ]
+  },
+{% endblock %}

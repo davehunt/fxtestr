@@ -1,0 +1,36 @@
+{% extends "base.json" %}
+{% block edges %}
+  "edges": [
+    {
+      "allowNulls": false,
+      "domain": {
+        "max": "today-1day",
+        "interval": "day",
+        "type": "time",
+        "min": "{{ since }}"
+      },
+      "name": "date",
+      "value": "result.end_time"
+    }
+  ],
+{% endblock %}
+{% block select %}
+  "select": [
+    {
+      "aggregate": "cardinality",
+      "name": "distinct",
+      "value": "result.test"
+    },
+    {
+      "aggregate": "count",
+      "name": "total",
+      "value": "result.test"
+    },
+    {
+			"name": "duration",
+			"aggregate": "percentile",
+			"percentile": 0.9,
+			"value": "result.duration"
+		}
+  ],
+{% endblock %}

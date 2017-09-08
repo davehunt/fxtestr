@@ -1,0 +1,31 @@
+{% extends "base.json" %}
+{% block groupby %}
+  "groupby": [
+    {
+      "name": "test",
+      "value": "result.test"
+    }
+  ],
+{% endblock groupby %}
+{% block select %}
+  "select": [
+    {
+      "aggregate": "count",
+			"name": "total",
+      "value": "result.test"
+    },
+    {
+      "name": "failures",
+      "aggregate": "sum",
+      "value": {
+        "when": {
+          "eq": {
+            "result.ok": "F"
+          }
+        },
+        "then": 1,
+        "else": 0
+      }
+    }
+  ],
+{% endblock %}

@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-header">Summary</div>
+  <div class="card-body">
+    <p class="card-text">A total of <strong>{{ distinct }}</strong> tests ran
+      <strong>{{ total }}</strong> times between
+      <strong>{{ start }}</strong> and
+      <strong>{{ end }}</strong>.
+    </p>
+  </div>
+  <div class="card-footer">
+    <small>
+      <a href="https://activedata.allizom.org/tools/query.html#query_id={{ meta.saved_as }}"
+         target="_blank" class="text-muted">
+        Query ran on {{ meta.timestamp.strftime('%d %b %Y at %X') }} and took {{ meta.timing.total }} seconds.
+      </a>
+    </small>
+  </div>
+</div>

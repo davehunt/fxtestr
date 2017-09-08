@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}fxtestr: {{ schema }}{% endblock %}
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.7.min.css">
+  <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.7.min.css">
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col">
+        <div id="query" style="display:none">
+          <form class="inline-form">
+            <span id="filters"></span>
+            <button type="button" class="btn btn-primary" onclick="query()">Go</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="progress mt-sm-3">
+          <div class="progress-bar progress-bar-striped progress-bar-animated"
+               role="progressbar" aria-valuenow="0" aria-valuemin="0"
+               aria-valuemax="100" style="display: none"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-sm-3">
+      <div id="summary" class="col"></div>
+    </div>
+
+    <div class="row mt-sm-3">
+      <div id="plot" class="col"></div>
+    </div>
+
+    <div class="row mt-sm-3">
+      <div id="slowest" class="col-6"></div>
+      <div id="failures" class="col-6"></div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{super()}}
+  <script type="text/javascript">
+function resetProgress(width) {
+  var progressBar = $('.progress-bar');
+  progressBar.width(width);
+  progressBar.attr('aria-valuenow', 0);
+  progressBar.removeClass('bg-danger');
+  progressBar.fadeIn();
+}
+function updateProgress(steps) {
+  var progressBar = $('.progress-bar');
+  var progress = parseInt(progressBar.attr('aria-valuenow')) + (100 / steps);
+  progressBar.attr('aria-valuenow', progress);
+  progressBar.width(progress + '%');
+  if (progress >= 100) {
+    progressBar.fadeOut();
+  }
+}
+function filters() {
+  var searchParams = new URLSearchParams(window.location.search);
+  var data = {};
+  for (let p of searchParams) {
+    data[p[0]] = p[1];
+  }
+  $('form .filter').each(function() {
+    let key = $(this).attr('name')
+    let value = $(this).val()
+    if (value) {
+      data[key] = value;
+      searchParams.set(key, value);
+    }
+  })
+  if (searchParams.toString()) {
+    var newPathQuery = window.location.pathname + '?' + searchParams.toString();
+    history.pushState(null, '', newPathQuery);
+  }
+  return data;
+}
+function updateFilters() {
+  var searchParams = new URLSearchParams(window.location.search);
+  resetProgress('10%');
+  var content = $('#query');
+  $.post('/{{ schema }}/filters', filters()).done(function(html) {
+    updateProgress(1);
+    $('#filters').html(html);
+    content.show();
+    if (searchParams.has('go')) {
+      query();
+    }
+  }).fail(function() {
+    $('.progress-bar').addClass('bg-danger');
+    updateProgress(1);
+    content.html(
+      '<div class="alert alert-danger" role="alert">' +
+      '<strong>Oh no!</strong> Something went horribly wrong....</div>');
+  });
+}
+function query() {
+  resetProgress('10%');
+  var ids = ['summary', 'plot', 'slowest', 'failures'];
+  for (var i in ids) {
+    let content = $('#' + ids[i]);
+    content.fadeOut();
+    $.post('/{{ schema }}/' + ids[i], filters()).done(function(html) {
+      updateProgress(ids.length);
+      content.html(html);
+      content.fadeIn();
+    }).fail(function() {
+      $('.progress-bar').addClass('bg-danger');
+      updateProgress(ids.length);
+      content.html(
+        '<div class="alert alert-danger" role="alert">' +
+        '<strong>Oh no!</strong> Something went horribly wrong....</div>');
+      content.fadeIn();
+    });
+  }
+}
+function showTests(test, category) {
+  var modal = $('#modal');
+  var data = filters();
+  data['test'] = test;
+  $.post('/{{ schema }}/tests/' + category, data).done(function(html) {
+    modal.html(html);
+    $('pre code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
+    modal.modal();
+  }).fail(function() {
+    modal.html(
+      '<div class="alert alert-danger" role="alert">' +
+      '<strong>Oh no!</strong> Something went horribly wrong....</div>');
+    modal.modal();
+  });
+}
+updateFilters();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.7.min.js"></script>
+  <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.7.min.js"></script>
+{% endblock %}

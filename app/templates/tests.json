@@ -1,0 +1,21 @@
+{% extends "base.json" %}
+{% block select %}
+  "select": [
+    {
+      "name": "id",
+      "value": "_id"
+    },
+    {
+      "name": "date",
+      "value": "result.end_time"
+    },
+    {
+      "name": "duration",
+      "value": "result.duration"
+    },
+    {
+      "name": "data",
+      "value": "."
+    }
+  ],
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.json" %}
+{% block groupby %}
+  "groupby": [
+    {
+      "name": "test",
+      "value": "result.test"
+    }
+  ],
+{% endblock %}
+{% block select %}
+  "select": [
+    {
+      "name": "duration",
+      "aggregate": "percentile",
+      "percentile": 0.9,
+      "value": "result.duration"
+    }
+  ],
+{% endblock %}

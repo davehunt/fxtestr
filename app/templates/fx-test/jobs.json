@@ -1,0 +1,29 @@
+{% extends "base.json" %}
+{% set schema = "fx-test" %}
+{% block groupby %}
+  "groupby": [
+    {
+      "name": "job",
+      "value": "run.job_name"
+    }
+  ],
+{% endblock groupby %}
+{% block where %}
+  "where": {
+    "and": [
+      {
+        "gt": {
+          "run.stats.start_time": {
+            "date": "{{ since }}"
+          }
+        }
+      }{% if project %},
+        {
+          "prefix": {
+            "run.job_name": "{{ project }}"
+          }
+        }
+      {% endif %}
+    ]
+  },
+{% endblock %}

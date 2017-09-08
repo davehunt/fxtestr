@@ -1,0 +1,25 @@
+{% extends "base.json" %}
+{% block select %}
+  "select": [
+    {
+      "aggregate": "min",
+      "name": "start",
+      "value": "run.stats.start_time"
+    },
+    {
+      "aggregate": "max",
+      "name": "end",
+      "value": "run.stats.end_time"
+    },
+    {
+      "aggregate": "cardinality",
+      "name": "distinct",
+      "value": "result.test"
+    },
+    {
+      "aggregate": "count",
+      "name": "total",
+      "value": "result.test"
+    }
+  ],
+{% endblock %}

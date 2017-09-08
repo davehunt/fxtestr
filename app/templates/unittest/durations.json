@@ -1,0 +1,28 @@
+{% extends "durations.json" %}
+{% set schema = "unittest" %}
+{% block where %}
+  "where": {
+    "and": [
+      {% if branch %}
+        {
+          "eq": {
+            "build.branch": "{{ branch }}"
+          }
+        },
+      {% endif %}
+      {
+        "gt": {
+          "run.stats.start_time": {
+            "date": "{{ since }}"
+          }
+        }
+      }{% if path %},
+        {
+          "prefix": {
+            "result.test": "{{ path }}"
+          }
+        }
+      {% endif %}
+    ]
+  },
+{% endblock %}
