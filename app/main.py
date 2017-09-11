@@ -255,16 +255,18 @@ def unittest_tests_slowest():
 
 
 def plot(tests, failures):
+    tools = 'pan,wheel_zoom,box_zoom,save,reset'
     df = pd.concat([tests, failures], axis=1, keys=['tests', 'failures'])
     x = np.concatenate((df.index, df.index[::-1]))
 
     x_range = (df.index.min().timestamp() * 1000,
                df.index.max().timestamp() * 1000)
-    p1 = figure(title='Distinct Tests', toolbar_location='above',
+    p1 = figure(title='Distinct Tests', toolbar_location='above', tools=tools,
                 plot_height=250, plot_width=450, x_axis_type='datetime',
                 x_range=x_range)
     stable = df.tests.distinct - df.failures.distinct
     y_range = df.tests.distinct.max() - stable.min() or stable.min()
+    p1.toolbar.logo = None
     p1.y_range.start = max(0, stable.min() - (y_range * 0.3))
     p1.y_range.end = df.tests.distinct.max() + (y_range * 0.3)
     p1.patch(x, np.concatenate((stable, np.zeros(len(stable)))), alpha=0.6,
@@ -272,16 +274,18 @@ def plot(tests, failures):
     p1.patch(x, np.concatenate((stable, df.tests.distinct)), alpha=0.6,
              fill_color='firebrick', line_alpha=0)
 
-    p2 = figure(title='Total Failures', toolbar_location='above',
+    p2 = figure(title='Total Failures', toolbar_location='above', tools=tools,
                 plot_height=250, plot_width=450, x_axis_type='datetime',
                 x_range=x_range)
+    p2.toolbar.logo = None
     p2.y_range.start = 0
     p2.patch(x, np.concatenate((df.failures.total, np.zeros(len(df.tests)))),
              alpha=0.6, fill_color='firebrick', line_alpha=0)
 
     p3 = figure(title='Average Test Duration', toolbar_location='above',
-                plot_height=250, plot_width=450, x_axis_type='datetime',
-                x_range=x_range)
+                tools=tools, plot_height=250, plot_width=450,
+                x_axis_type='datetime', x_range=x_range)
+    p3.toolbar.logo = None
     p3.y_range.start = 0
     p3.patch(x, np.concatenate((df.tests.duration, np.zeros(len(df.tests)))),
              alpha=0.6, line_alpha=0)
