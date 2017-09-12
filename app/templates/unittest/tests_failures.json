@@ -5,6 +5,11 @@
     "and": [
       {
         "eq": {
+          "result.test": "{{ test }}"
+        }
+      },
+      {
+        "eq": {
           "result.ok": "F"
         }
       },
