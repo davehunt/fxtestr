@@ -73,10 +73,8 @@ function filters() {
   $('form .filter').each(function() {
     let key = $(this).attr('name')
     let value = $(this).val()
-    if (value) {
-      data[key] = value;
-      searchParams.set(key, value);
-    }
+    data[key] = value;
+    searchParams.set(key, value);
   })
   if (searchParams.toString()) {
     var newPathQuery = window.location.pathname + '?' + searchParams.toString();

@@ -11,13 +11,6 @@
 {% block where %}
   "where": {
     "and": [
-      {% if branch %}
-        {
-          "eq": {
-            "build.branch": "{{ branch }}"
-          }
-        },
-      {% endif %}
       {
         "gt": {
           "run.stats.start_time": {

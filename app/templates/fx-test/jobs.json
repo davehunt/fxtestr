@@ -17,13 +17,7 @@
             "date": "{{ since }}"
           }
         }
-      }{% if project %},
-        {
-          "prefix": {
-            "run.job_name": "{{ project }}"
-          }
-        }
-      {% endif %}
+      }
     ]
   },
 {% endblock %}
