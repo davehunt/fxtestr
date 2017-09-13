@@ -10,6 +10,13 @@
           }
         },
       {% endif %}
+      {% if platform %}
+        {
+          "eq": {
+            "treeherder.machine.platform": "{{ platform }}"
+          }
+        },
+      {% endif %}
       {
         "gt": {
           "run.stats.start_time": {
