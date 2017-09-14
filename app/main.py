@@ -268,7 +268,7 @@ def plot(tests, failures):
     p1.y_range.end = df.tests.distinct.max() + (y_range * 0.3)
     p1.patch(x, np.concatenate((stable, np.zeros(len(stable)))), alpha=0.6,
              line_alpha=0)
-    p1.patch(x, np.concatenate((stable, df.tests.distinct)), alpha=0.6,
+    p1.patch(x, np.concatenate((stable, df.tests.distinct[::-1])), alpha=0.6,
              fill_color='firebrick', line_alpha=0)
 
     p2 = figure(title='Total Failures', toolbar_location='above', tools=tools,
