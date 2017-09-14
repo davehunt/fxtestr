@@ -194,10 +194,6 @@ def unittest_filters():
          'options': sorted(ad.query('paths')[1].test.apply(
              lambda x: x.partition('/test')[0]).unique().tolist()),
          'selected': request.form.get('path', '')},
-        {'id': 'platform',
-         'label': 'Platform',
-         'options': sorted([x for x in ad.query('platforms')[1].platform.tolist() if x is not None]),
-         'selected': request.form.get('platform', '')},
         {'id': 'since',
          'label': 'Since',
          'options': [
