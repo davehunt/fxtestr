@@ -187,8 +187,8 @@ def unittest_filters():
     filters = [
         {'id': 'branch',
          'label': 'Branch',
-         'options': ad.query('branches')[1].branch.tolist(),
-         'selected': request.form.get('branch', 'mozilla-central')},
+         'options': ['autoland', 'mozilla-inboud', 'mozilla-central', 'mozilla-beta'],
+         'selected': request.form.get('branch', 'autoland')},
         {'id': 'path',
          'label': 'Path',
          'options': sorted(ad.query('paths')[1].test.apply(
