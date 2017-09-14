@@ -1,12 +1,19 @@
 {% for f in filters %}
   <label class="mr-sm-2" for="{{ f.id }}">{{ f.label }}</label>
-  <select id="{{ f.id }}" class="filter custom-select mb-2 mr-sm-2 mb-sm-0"
-          name="{{ f.id }}">
-    <option value="">All</option>
-    {% for o in f.options %}
-      <option {% if o == f.selected %}selected{% endif %} value="{{ o }}">
-        {{ o }}
-      </option>
-    {% endfor %}
-  </select>
+  {% if f.options %}
+    <select id="{{ f.id }}" class="filter custom-select mb-2 mr-sm-2 mb-sm-0"
+            name="{{ f.id }}">
+      <option value="">All</option>
+      {% for o in f.options %}
+        <option {% if o == f.selected %}selected{% endif %} value="{{ o }}">
+          {{ o }}
+        </option>
+      {% endfor %}
+    </select>
+  {% else %}
+    <input type="text" id="{{ f.id }}"
+           class="filter form-control mb-2 mr-sm-2 mb-sm-0"
+           name="{{ f.id }}" value="{{ f.value }}" />
+  {% endif %}
 {% endfor %}
+<button type="button" class="btn btn-primary" onclick="query()">Go</button>

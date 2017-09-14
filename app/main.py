@@ -183,7 +183,6 @@ def unittest():
 
 @app.route('/unittest/filters', methods=['POST'])
 def unittest_filters():
-    ad = ActiveData(request, 'unittest')
     filters = [
         {'id': 'branch',
          'label': 'Branch',
@@ -191,9 +190,7 @@ def unittest_filters():
          'selected': request.form.get('branch', 'autoland')},
         {'id': 'path',
          'label': 'Path',
-         'options': sorted(ad.query('paths')[1].test.apply(
-             lambda x: x.partition('/test')[0]).unique().tolist()),
-         'selected': request.form.get('path', '')},
+         'value': request.form.get('path', '')},
         {'id': 'since',
          'label': 'Since',
          'options': [
