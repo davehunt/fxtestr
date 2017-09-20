@@ -119,12 +119,13 @@ function query() {
       updateProgress(ids.length);
       content.html(html);
       content.fadeIn();
-    }).fail(function() {
+    }).fail(function(jqXHR, textStatus, errorThrown) {
       $('.progress-bar').addClass('bg-danger');
       updateProgress(ids.length);
       content.html(
         '<div class="alert alert-danger" role="alert">' +
-        '<strong>Oh no!</strong> Something went horribly wrong....</div>');
+        '<strong>ERROR ' + jqXHR.status + ': ' + errorThrown + '</strong>' +
+        '<!-- ' + jqXHR.responseText + ' --></div>');
       content.fadeIn();
     });
   }
