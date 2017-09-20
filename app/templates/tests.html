@@ -30,10 +30,6 @@
              <span class="badge badge-secondary ml-1">
                {{ t.data.result.duration|round|int }} seconds
              </span>
-             {% if t.data.task %}
-               <a class="badge badge-secondary ml-1" target="_blank"
-                  href="https://tools.taskcluster.net/task-inspector/#{{ t.data.task.id }}">Taskcluster</a>
-             {% endif %}
              {% if t.data.treeherder and t.data.build.revision %}
                <a class="badge badge-secondary ml-1" target="_blank"
                   href="https://treeherder.mozilla.org/#/jobs?repo={{ t.data.build.branch }}&amp;revision={{ t.data.build.revision }}&amp;filter-job_group_symbol={{ t.data.treeherder.groupSymbol }}&amp;filter-job_type_symbol={{ t.data.treeherder.symbol }}">Treeherder</a>
