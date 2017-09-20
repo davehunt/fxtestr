@@ -1,0 +1,33 @@
+{% extends "skipped.json" %}
+{% set schema = "fx-test" %}
+{% block where %}
+  "where": {
+    "and": [
+      {% if job %}
+        {
+          "eq": {
+            "run.job_name": "{{ job }}"
+          }
+        },
+      {% endif %}
+      {
+        "gt": {
+          "run.stats.start_time": {
+            "date": "{{ since }}"
+          }
+        }
+      },
+      {
+        "eq": {
+          "result.result": "SKIP"
+        }
+      }{% if project %},
+        {
+          "prefix": {
+            "run.job_name": "{{ project }}"
+          }
+        }
+      {% endif %}
+    ]
+  },
+{% endblock %}

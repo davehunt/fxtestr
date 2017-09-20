@@ -71,26 +71,31 @@ class ActiveData(object):
     def failures(self):
         meta, data = self.query('failures')
         data['pass'] = 1 - data['failures']/data['total']
-        return meta, data[data.failures > 0].sort_values('pass')[:10]
+        return meta, data[data.failures > 0].sort_values('pass')[:5]
+
+    @property
+    def skipped(self):
+        meta, data = self.query('skipped')
+        return meta, data[:5]
 
     @property
     def slowest(self):
         meta, data = self.query('durations')
-        return meta, data.sort_values('duration', ascending=False)[:10]
+        return meta, data.sort_values('duration', ascending=False)[:5]
 
     @property
     def tests_failures(self):
         meta, data = self.query('tests_failures')
         data['id'] = data.id.apply(lambda x: re.sub(r'\W', '', x))
         data['date'] = pd.to_datetime(data['date'], unit='s')
-        return meta, data.sort_values(by='date', ascending=False)[:100]
+        return meta, data.sort_values(by='date', ascending=False)[:50]
 
     @property
     def tests_slowest(self):
         meta, data = self.query('tests')
         data['id'] = data.id.apply(lambda x: re.sub(r'\W', '', x))
         data['date'] = pd.to_datetime(data['date'], unit='s')
-        return meta, data.sort_values(by='duration', ascending=False)[:100]
+        return meta, data.sort_values(by='duration', ascending=False)[:50]
 
 
 @app.route('/')
@@ -153,6 +158,13 @@ def fxtest_failures():
     meta, data = ActiveData(request, 'fx-test').failures
     template_vars = {'meta': meta, 'tests': data.to_dict(orient='records')}
     return render_template('failures.html', **template_vars)
+
+
+@app.route('/fx-test/skipped', methods=['POST'])
+def fxtest_skipped():
+    meta, data = ActiveData(request, 'fx-test').skipped
+    template_vars = {'meta': meta, 'tests': data.to_dict(orient='records')}
+    return render_template('skipped.html', **template_vars)
 
 
 @app.route('/fx-test/slowest', methods=['POST'])
@@ -228,6 +240,13 @@ def unittest_failures():
     meta, data = ActiveData(request, 'unittest').failures
     template_vars = {'meta': meta, 'tests': data.to_dict(orient='records')}
     return render_template('failures.html', **template_vars)
+
+
+@app.route('/unittest/skipped', methods=['POST'])
+def unittest_skipped():
+    meta, data = ActiveData(request, 'unittest').skipped
+    template_vars = {'meta': meta, 'tests': data.to_dict(orient='records')}
+    return render_template('skipped.html', **template_vars)
 
 
 @app.route('/unittest/slowest', methods=['POST'])

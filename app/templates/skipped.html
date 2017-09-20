@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-header" style="border-bottom:none">
+    Skipped <small>(most skipped tests)</small>
+  </div>
+  <div class="list-group list-group-flush">
+    {% for t in tests %}
+      <a href="javascript:showTests('{{ t.test|urlencode }}', 'skipped')"
+         class="list-group-item list-group-item-action">
+         <span class="badge badge-secondary badge-pill float-right">{{ t.total }}</span>
+        {{ t.test }}
+      </a>
+    {% endfor %}
+  </div>
+  <div class="card-footer" style="border-top:none">
+    <small>
+      <a href="https://activedata.allizom.org/tools/query.html#query_id={{ meta.saved_as }}"
+         target="_blank" class="text-muted">
+         Query ran on {{ meta.timestamp.strftime('%d %b %Y at %X') }} and took {{ meta.timing.total }} seconds.
+      </a>
+    </small>
+  </div>
+</div>
