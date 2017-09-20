@@ -16,11 +16,6 @@
             "date": "{{ since }}"
           }
         }
-      },
-      {
-        "eq": {
-          "result.result": "SKIP"
-        }
       }{% if path %},
         {
           "prefix": {

@@ -76,6 +76,8 @@ class ActiveData(object):
     @property
     def skipped(self):
         meta, data = self.query('skipped')
+        data['concentration'] = data['skips']/data['total']
+        data = data[data.skips > 0].sort_values('skips', ascending=False)
         return meta, data[:5]
 
     @property
