@@ -1,0 +1,55 @@
+{% extends "base.json" %}
+{% set schema = "fx-test" %}
+{% block groupby %}
+  "groupby": [
+    {
+      "name": "test",
+      "value": "result.test"
+    }
+  ],
+{% endblock groupby %}
+{% block select %}
+  "select": [
+    {
+      "aggregate": "count",
+			"name": "total",
+      "value": "result.test"
+    }
+  ],
+{% endblock %}
+{% block where %}
+  "where": {
+    "and": [
+      {% if job %}
+        {
+          "eq": {
+            "run.job_name": "{{ job }}"
+          }
+        },
+      {% endif %}
+      {
+        "eq": {
+          "result.ok":"T"
+        }
+      },
+      {
+        "eq": {
+          "result.result":"FAIL"
+        }
+      },
+      {
+        "gt": {
+          "run.stats.start_time": {
+            "date": "{{ since }}"
+          }
+        }
+      }{% if project %},
+        {
+          "prefix": {
+            "run.job_name": "{{ project }}"
+          }
+        }
+      {% endif %}
+    ]
+  },
+{% endblock %}

@@ -46,6 +46,10 @@
       <div id="failures" class="col"></div>
     </div>
 
+    <div class="row mt-sm-3">
+      <div id="xfails" class="col"></div>
+    </div>
+
   </div>
 {% endblock %}
 
@@ -107,7 +111,7 @@ function updateFilters() {
 }
 function query() {
   resetProgress('10%');
-  var ids = ['summary', 'plot', 'slowest', 'skipped', 'failures'];
+  var ids = ['summary', 'plot', 'slowest', 'skipped', 'failures', 'xfails'];
   for (var i in ids) {
     let content = $('#' + ids[i]);
     content.fadeOut();

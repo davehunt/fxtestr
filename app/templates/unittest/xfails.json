@@ -1,0 +1,55 @@
+{% extends "base.json" %}
+{% set schema = "unittest" %}
+{% block groupby %}
+  "groupby": [
+    {
+      "name": "test",
+      "value": "result.test"
+    }
+  ],
+{% endblock groupby %}
+{% block select %}
+  "select": [
+    {
+      "aggregate": "count",
+			"name": "total",
+      "value": "result.test"
+    }
+  ],
+{% endblock %}
+{% block where %}
+  "where": {
+    "and": [
+      {% if branch %}
+        {
+          "eq": {
+            "build.branch": "{{ branch }}"
+          }
+        },
+      {% endif %}
+      {
+        "eq": {
+          "result.ok":"T"
+        }
+      },
+      {
+        "eq": {
+          "result.result":"FAIL"
+        }
+      },
+      {
+        "gt": {
+          "run.stats.start_time": {
+            "date": "{{ since }}"
+          }
+        }
+      }{% if path %},
+        {
+          "prefix": {
+            "result.test": "{{ path }}"
+          }
+        }
+      {% endif %}
+    ]
+  },
+{% endblock %}

@@ -1,0 +1,26 @@
+<div class="card">
+  <div class="card-header" style="border-bottom:none">Expected Failures</div>
+  {% if tests %}
+    <div class="list-group list-group-flush">
+      {% for t in tests %}
+        <a href="javascript:showTests('{{ t.test|urlencode }}', 'xfails')"
+           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+           {{ t.test }}
+           <span class="badge badge-secondary badge-pill">{{ t.total|int }}</span>
+        </a>
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="card-body">
+        <p class="card-text">There were no expected failures.</p>
+      </div>
+    {% endif %}
+  <div class="card-footer" style="border-top:none">
+    <small>
+      <a href="https://activedata.allizom.org/tools/query.html#query_id={{ meta.saved_as }}"
+         target="_blank" class="text-muted">
+         Query ran on {{ meta.timestamp.strftime('%d %b %Y at %X') }} and took {{ meta.timing.total }} seconds.
+      </a>
+    </small>
+  </div>
+</div>
