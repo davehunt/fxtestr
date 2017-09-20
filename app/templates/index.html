@@ -65,7 +65,7 @@ function resetProgress(width) {
 }
 function updateProgress(steps) {
   var progressBar = $('.progress-bar');
-  var progress = parseInt(progressBar.attr('aria-valuenow')) + (100 / steps);
+  var progress = parseInt(progressBar.attr('aria-valuenow')) + Math.ceil(100 / steps);
   progressBar.attr('aria-valuenow', progress);
   progressBar.width(progress + '%');
   if (progress >= 100) {
