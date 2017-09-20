@@ -93,6 +93,13 @@ class ActiveData(object):
         return meta, data.sort_values(by='date', ascending=False)[:50]
 
     @property
+    def tests_skipped(self):
+        meta, data = self.query('tests_skipped')
+        data['id'] = data.id.apply(lambda x: re.sub(r'\W', '', x))
+        data['date'] = pd.to_datetime(data['date'], unit='s')
+        return meta, data.sort_values(by='date', ascending=False)[:50]
+
+    @property
     def tests_slowest(self):
         meta, data = self.query('tests')
         data['id'] = data.id.apply(lambda x: re.sub(r'\W', '', x))
@@ -183,6 +190,13 @@ def fxtest_tests_failures():
     return render_template('tests.html', **template_vars)
 
 
+@app.route('/fx-test/tests/skipped', methods=['POST'])
+def fxtest_tests_skipped():
+    meta, data = ActiveData(request, 'fx-test').tests_skipped
+    template_vars = {'meta': meta, 'tests': data.to_dict(orient='records')}
+    return render_template('tests.html', **template_vars)
+
+
 @app.route('/fx-test/tests/slowest', methods=['POST'])
 def fxtest_tests_slowest():
     meta, data = ActiveData(request, 'fx-test').tests_slowest
@@ -261,6 +275,13 @@ def unittest_slowest():
 @app.route('/unittest/tests/failures', methods=['POST'])
 def unittest_tests_failures():
     meta, data = ActiveData(request, 'unittest').tests_failures
+    template_vars = {'meta': meta, 'tests': data.to_dict(orient='records')}
+    return render_template('tests.html', **template_vars)
+
+
+@app.route('/unittest/tests/skipped', methods=['POST'])
+def unittest_tests_skipped():
+    meta, data = ActiveData(request, 'unittest').tests_skipped
     template_vars = {'meta': meta, 'tests': data.to_dict(orient='records')}
     return render_template('tests.html', **template_vars)
 
