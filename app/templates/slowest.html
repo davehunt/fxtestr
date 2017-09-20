@@ -1,17 +1,19 @@
 <div class="card">
-  <div class="card-header">Slowest</div>
+  <div class="card-header" style="border-bottom:none">
+    Slowest <small>(longest duration)</small>
+  </div>
   <div class="list-group list-group-flush">
     {% for t in tests %}
       <a href="javascript:showTests('{{ t.test|urlencode }}', 'slowest')"
-         class="d-inline-block text-truncate list-group-item list-group-item-action">
-        <span class="badge badge-secondary mr-sm-2">
-          {{ t.duration|round|int }} seconds
-        </span>
+         class="list-group-item list-group-item-action">
+         <span class="badge badge-secondary badge-pill float-right">
+           {{ t.duration|round|int }} seconds
+         </span>
         {{ t.test }}
       </a>
     {% endfor %}
   </div>
-  <div class="card-footer">
+  <div class="card-footer" style="border-top:none">
     <small>
       <a href="https://activedata.allizom.org/tools/query.html#query_id={{ meta.saved_as }}"
          target="_blank" class="text-muted">
