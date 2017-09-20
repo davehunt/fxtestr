@@ -126,19 +126,22 @@ function query() {
   }
 }
 function showTests(test, category) {
+  var path = '/{{ schema }}/tests/' + category;
   var modal = $('#modal');
   var data = filters();
   data['test'] = test;
-  $.post('/{{ schema }}/tests/' + category, data).done(function(html) {
+  $.post(path, data).done(function(html) {
     modal.html(html);
     $('pre code').each(function(i, block) {
       hljs.highlightBlock(block);
     });
     modal.modal();
-  }).fail(function() {
-    modal.html(
-      '<div class="alert alert-danger" role="alert">' +
-      '<strong>Oh no!</strong> Something went horribly wrong....</div>');
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+    modal.find('.modal-title').html('ERROR ' + jqXHR.status + ': ' + errorThrown);
+    modal.find('.modal-body').html(
+      'Path: ' + path + '<br />' +
+      'Data: ' + JSON.stringify(data));
+    modal.find('.modal-footer').html('');
     modal.modal();
   });
 }
